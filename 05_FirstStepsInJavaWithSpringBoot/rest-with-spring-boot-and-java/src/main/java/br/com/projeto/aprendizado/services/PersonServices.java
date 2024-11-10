@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.projeto.aprendizado.data.vo.v1.PersonVo;
 import br.com.projeto.aprendizado.exceptions.ResourceNotFoundExceptionException;
+import br.com.projeto.aprendizado.mapper.DozerMapper;
+import br.com.projeto.aprendizado.model.Person;
 import br.com.projeto.aprendizado.repositories.PersonRepository;
 
 @Service
@@ -22,28 +24,25 @@ public class PersonServices {
 
 		logger.info("Finding all people!");
 
-		return repository.findAll();
+		return DozerMapper.parseListObjects(repository.findAll(), PersonVo.class);
 	}
 
 	public PersonVo findById(Long id) {
 
 		logger.info("Finding one person!");
 
-		PersonVo person = new PersonVo();
-		person.setFirstName("Matheus");
-		person.setLastName("Vieira");
-		person.setAddress("Praia Grande / São Paulo - Brasil");
-		person.setGender("Male");
-
-		return repository.findById(id)
+		var entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundExceptionException("No records found for this ID"));
+
+		return DozerMapper.parseObject(entity, PersonVo.class);
 	}
 
 	public PersonVo create(PersonVo person) {
 
 		logger.info("Creating one person!");
-
-		return repository.save(person);
+		var entity = DozerMapper.parseObject(person, Person.class);
+		var vo = DozerMapper.parseObject(repository.save(entity), PersonVo.class);
+		return vo;
 	}
 
 	public PersonVo update(PersonVo person) {
@@ -58,7 +57,8 @@ public class PersonServices {
 		entity.setAddress(person.getAddress());
 		entity.setGender(person.getGender());
 
-		return repository.save(person);
+		var vo = DozerMapper.parseObject(repository.save(entity), PersonVo.class);
+		return vo;
 	}
 
 	public void delete(Long id) {
