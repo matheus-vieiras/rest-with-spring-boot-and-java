@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.projeto.aprendizado.model.Person;
+import br.com.projeto.aprendizado.data.vo.v1.PersonVo;
 import br.com.projeto.aprendizado.services.PersonServices;
 
 @RestController
@@ -26,22 +26,22 @@ public class PersonController {
 //	private PersonServices service = new PersonService(); a anotação ja faz a instanciação em tempo de execução
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Person> findAll() {
+	public List<PersonVo> findAll() {
 		return service.findAll();
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Person findById(@PathVariable(value = "id") Long id) throws Exception {
+	public PersonVo findById(@PathVariable(value = "id") Long id) throws Exception {
 		return service.findById(id);
 	}
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Person create(@RequestBody Person person) {
+	public PersonVo create(@RequestBody PersonVo person) {
 		return service.create(person);
 	}
 
 	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Person update(@RequestBody Person person) {
+	public PersonVo update(@RequestBody PersonVo person) {
 		return service.update(person);
 	}
 
