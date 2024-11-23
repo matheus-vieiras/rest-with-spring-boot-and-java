@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({ "id", "address", "first_name", "last_name", "gender" })
+@JsonPropertyOrder({ "id", "first_name", "last_name", "gender", "address" })
 public class PersonVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,6 @@ public class PersonVo implements Serializable {
 	
 	private String address;
 	
-	@JsonIgnore
 	private String gender;
 
 	public PersonVo() {

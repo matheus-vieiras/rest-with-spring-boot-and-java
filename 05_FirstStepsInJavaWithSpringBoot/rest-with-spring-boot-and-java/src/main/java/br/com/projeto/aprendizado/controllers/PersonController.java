@@ -3,7 +3,6 @@ package br.com.projeto.aprendizado.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.projeto.aprendizado.data.vo.v1.PersonVo;
 import br.com.projeto.aprendizado.data.vo.v2.PersonVoV2;
 import br.com.projeto.aprendizado.services.PersonServices;
+import br.com.projeto.aprendizado.util.MediaType;
 
 @RestController
 @RequestMapping("/api/person/v1")
@@ -26,30 +26,30 @@ public class PersonController {
 	private PersonServices service;
 //	private PersonServices service = new PersonService(); a anotação ja faz a instanciação em tempo de execução
 
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@GetMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
 	public List<PersonVo> findAll() {
 		return service.findAll();
 	}
 
-	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
 	public PersonVo findById(@PathVariable(value = "id") Long id) throws Exception {
 		return service.findById(id);
 	}
 
-	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
-				 consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@PostMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML }, 
+				 consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
 	public PersonVo create(@RequestBody PersonVo person) {
 		return service.create(person);
 	}
 	
-	@PostMapping(value = "/v2", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
-								consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@PostMapping(value = "/v2", produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML },
+								consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
 	public PersonVoV2 createV2(@RequestBody PersonVoV2 person) {
 		return service.createV2(person);
 	}
 
-	@PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
-				consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@PutMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML }, 
+				consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
 	public PersonVo update(@RequestBody PersonVo person) {
 		return service.update(person);
 	}
