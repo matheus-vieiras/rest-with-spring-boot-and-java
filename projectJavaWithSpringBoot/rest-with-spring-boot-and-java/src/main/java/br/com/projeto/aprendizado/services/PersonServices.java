@@ -13,6 +13,7 @@ import br.com.projeto.aprendizado.mapper.DozerMapper;
 import br.com.projeto.aprendizado.mapper.custom.PersonMapper;
 import br.com.projeto.aprendizado.model.Person;
 import br.com.projeto.aprendizado.repositories.PersonRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PersonServices {
@@ -72,6 +73,19 @@ public class PersonServices {
 
 		var vo = DozerMapper.parseObject(repository.save(entity), PersonVo.class);
 		return vo;
+	}
+	
+	@Transactional
+	public PersonVo disablePerson(Long id) {
+
+		logger.info("Disabling one person!");
+		
+		repository.disablePerson(id);
+
+		var entity = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundExceptionException("No records found for this ID"));
+
+		return DozerMapper.parseObject(entity, PersonVo.class);
 	}
 
 	public void delete(Long id) {
