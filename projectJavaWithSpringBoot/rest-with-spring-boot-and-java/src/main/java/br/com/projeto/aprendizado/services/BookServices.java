@@ -1,11 +1,13 @@
 package br.com.projeto.aprendizado.services;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.projeto.aprendizado.converter.DozerConverter;
 import br.com.projeto.aprendizado.data.vo.v1.BookVo;
 import br.com.projeto.aprendizado.exceptions.ResourceNotFoundExceptionException;
 import br.com.projeto.aprendizado.mapper.DozerMapper;
@@ -20,11 +22,11 @@ public class BookServices {
 	@Autowired
 	BookRepository repository;
 
-	public List<BookVo> findAll() {
-
+	public Page<BookVo> findAll(Pageable pageable) {
 		logger.info("Finding all book!");
 
-		return DozerMapper.parseListObjects(repository.findAll(), BookVo.class);
+		var page = repository.findAll(pageable);
+		return page.map(this::convertToBookVo);
 	}
 
 	public BookVo findById(Long id) {
@@ -69,6 +71,10 @@ public class BookServices {
 
 		repository.delete(entity);
 
+	}
+	
+	private BookVo convertToBookVo(Book entity) {
+		return DozerConverter.parseObject(entity, BookVo.class);
 	}
 
 }
