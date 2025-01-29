@@ -1,11 +1,13 @@
 package br.com.projeto.aprendizado.services;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.projeto.aprendizado.converter.DozerConverter;
 import br.com.projeto.aprendizado.data.vo.v1.PersonVo;
 import br.com.projeto.aprendizado.data.vo.v2.PersonVoV2;
 import br.com.projeto.aprendizado.exceptions.ResourceNotFoundExceptionException;
@@ -26,11 +28,9 @@ public class PersonServices {
 	@Autowired
 	PersonMapper mapper;
 
-	public List<PersonVo> findAll() {
-
-		logger.info("Finding all people!");
-
-		return DozerMapper.parseListObjects(repository.findAll(), PersonVo.class);
+	public Page<PersonVo> findAll(Pageable pageable) {
+		var page = repository.findAll(pageable);
+		return page.map(this::convertToPersonVo);
 	}
 
 	public PersonVo findById(Long id) {
@@ -96,6 +96,10 @@ public class PersonServices {
 
 		repository.delete(entity);
 
+	}
+	
+	private PersonVo convertToPersonVo(Person entity) {
+		return DozerConverter.parseObject(entity, PersonVo.class);
 	}
 
 }

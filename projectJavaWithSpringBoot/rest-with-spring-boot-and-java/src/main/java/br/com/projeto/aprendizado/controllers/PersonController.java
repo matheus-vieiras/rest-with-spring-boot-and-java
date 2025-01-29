@@ -1,8 +1,9 @@
 package br.com.projeto.aprendizado.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.projeto.aprendizado.data.vo.v1.PersonVo;
@@ -51,8 +53,13 @@ public class PersonController {
 			@ApiResponse(description = "Not Found", responseCode = "404", content = @Content), 
 			@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content) 
 	})
-	public List<PersonVo> findAll() {
-		return service.findAll();
+	public ResponseEntity<Page<PersonVo>> findAll(
+			@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "limit", defaultValue = "12") Integer limit
+			) {
+		
+		Pageable pageable = PageRequest.of(page, limit);
+		return ResponseEntity.ok(service.findAll(pageable));
 	}
 	
 	
